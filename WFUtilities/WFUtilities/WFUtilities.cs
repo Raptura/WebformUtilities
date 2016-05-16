@@ -37,6 +37,13 @@ namespace WFUtilities
         **************************************************************************************************/
 
         //GridViews
+
+        /// <summary>
+        /// Exports a Gridview to an Excel File.
+        /// </summary>
+        /// <param name="gv">The Grid View.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
         public static void GridViewToXLS(GridView gv, HttpResponse response, string fileName)
         {
             response.Clear();
@@ -62,6 +69,13 @@ namespace WFUtilities
             response.End();
         }
 
+        /// <summary>
+        /// Exports a Gridview to an Excel File.
+        /// </summary>
+        /// <param name="gv">The Grid View.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol"> The first column of the Gridview to export.</param>
         public static void GridViewToXLS(GridView gv, HttpResponse response, string fileName, int startCol)
         {
             DataSet myDataSet = new DataSet();
@@ -94,7 +108,14 @@ namespace WFUtilities
 
             GridViewToXLS(exportGv, response, fileName);
         }
-
+        /// <summary>
+        /// Exports a Gridview to an Excel File.
+        /// </summary>
+        /// <param name="gv">The Grid View.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
+        /// <param name="endCol">The last column of the Gridview to export.</param>
         public static void GridViewToXLS(GridView gv, HttpResponse response, string fileName, int startCol, int endCol)
         {
             DataSet myDataSet = new DataSet();
@@ -129,6 +150,12 @@ namespace WFUtilities
         }
 
         //DataTables (Relies on GridView Functions)
+        /// <summary>
+        /// Export a DataTable to an Excel File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
         public static void DataTableToXLS(DataTable dt, HttpResponse response, string fileName)
         {
             GridView gv = new GridView();
@@ -138,6 +165,13 @@ namespace WFUtilities
             GridViewToXLS(gv, response, fileName);
         }
 
+        /// <summary>
+        /// Export a DataTable to an Excel File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
         public static void DataTableToXLS(DataTable dt, HttpResponse response, string fileName, int startCol)
         {
             DataTable myTable = dt.Copy();
@@ -163,6 +197,15 @@ namespace WFUtilities
             DataTableToXLS(myTable, response, fileName);
         }
 
+
+        /// <summary>
+        /// Export a DataTable to an Excel File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
+        /// <param name="endCol">The last column of the Gridview to export.</param>
         public static void DataTableToXLS(DataTable dt, HttpResponse response, string fileName, int startCol, int endCol)
         {
             DataTable myTable = dt.Copy();
@@ -189,11 +232,12 @@ namespace WFUtilities
         }
 
         //Set to Generic
+        [Obsolete]
         public static DataTable XLSToDataTable(string inputFile)
         {
             throw new NotImplementedException();
         }
-
+        [Obsolete]
         public static string[][] XLSToArray(string inputFile)
         {
             throw new NotImplementedException();
@@ -206,6 +250,13 @@ namespace WFUtilities
         **************************************************************************************************/
 
         //GridViews
+
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="gv">The Gridview.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
         public static void GridViewToCSV(GridView gv, HttpResponse response, string fileName)
         {
             response.Clear();
@@ -236,6 +287,13 @@ namespace WFUtilities
             response.End();
         }
 
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="gv">The Gridview.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
         public static void GridViewToCSV(GridView gv, HttpResponse response, string fileName, int startCol)
         {
             DataSet myDataSet = new DataSet();
@@ -269,6 +327,14 @@ namespace WFUtilities
             GridViewToCSV(exportGv, response, fileName);
         }
 
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="gv">The Gridview.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
+        /// <param name="endCol">The last column of the Gridview to export.</param>
         public static void GridViewToCSV(GridView gv, HttpResponse response, string fileName, int startCol, int endCol)
         {
             DataSet myDataSet = new DataSet();
@@ -303,6 +369,13 @@ namespace WFUtilities
         }
 
         //DataTables
+
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
         public static void DataTableToCSV(DataTable dt, HttpResponse response, string fileName)
         {
             response.Clear();
@@ -331,6 +404,13 @@ namespace WFUtilities
             response.End();
         }
 
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
         public static void DataTableToCSV(DataTable dt, HttpResponse response, string fileName, int startCol)
         {
             DataTable myTable = dt.Copy();
@@ -356,6 +436,14 @@ namespace WFUtilities
             DataTableToCSV(myTable, response, fileName);
         }
 
+        /// <summary>
+        /// Export a DataTable to an CSV File
+        /// </summary>
+        /// <param name="dt">The Data Table.</param>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="startCol">The first column of the Gridview to export.</param>
+        /// <param name="endCol">The last column of the Gridview to export.</param>
         public static void DataTableToCSV(DataTable dt, HttpResponse response, string fileName, int startCol, int endCol)
         {
             DataTable myTable = dt.Copy();
@@ -382,6 +470,11 @@ namespace WFUtilities
         }
 
 
+        /// <summary>
+        /// Converts a CSV file's data to a Data Table
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <returns></returns>
         public static DataTable CSVToDataTable(string inputFile)
         {
             DataTable dt = new DataTable();
@@ -408,6 +501,11 @@ namespace WFUtilities
             return dt;
         }
 
+        /// <summary>
+        /// Converts a CSV file's data to a string jagged array
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <returns></returns>
         public static string[][] CSVToArray(string inputFile)
         {
             string[][] arr;
@@ -439,7 +537,12 @@ namespace WFUtilities
          * 
         **************************************************************************************************/
 
-        [Obsolete]
+        /// <summary>
+        /// Serializes the PDF to a byte array.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
         public static byte[] SerializePDF(FileUpload control, string fileName)
         {
             Boolean fileOK = false;
@@ -479,21 +582,26 @@ namespace WFUtilities
             }
         }
 
-        [Obsolete]
-        public static void DeserializePDF(HttpResponse Response, string fileName, byte[] pdfData)
+        /// <summary>
+        /// Deserializes byte array data, and downloads it as a PDF file.
+        /// </summary>
+        /// <param name="response">The HttpResponse that will download the Excel File.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="pdfData">The PDF data in its serialized form.</param>
+        public static void DeserializePDF(HttpResponse response, string fileName, byte[] pdfData)
         {
-            Response.Clear();
-            Response.AddHeader("content-disposition",
+            response.Clear();
+            response.AddHeader("content-disposition",
             "attachment;filename=" + fileName + ".pdf");
-            Response.Charset = "";
-            Response.ContentType = "application/pdf";
+            response.Charset = "";
+            response.ContentType = "application/pdf";
 
-            Response.Buffer = true;
+            response.Buffer = true;
 
             //convert to the pdf
             MemoryStream ms = new MemoryStream(pdfData);
-            ms.WriteTo(Response.OutputStream);
-            Response.End();
+            ms.WriteTo(response.OutputStream);
+            response.End();
 
             //System.IO.File.WriteAllBytes(fileName, pdfData);
         }
