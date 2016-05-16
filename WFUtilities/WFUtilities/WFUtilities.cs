@@ -218,8 +218,6 @@ namespace WFUtilities
 
             StringBuilder sb = new StringBuilder();
 
-            //append new line
-            sb.Append("\r\n");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 for (int k = 0; k < dt.Columns.Count; k++)
@@ -227,8 +225,9 @@ namespace WFUtilities
                     //add separator
                     sb.Append(dt.Rows[i].ItemArray[k].ToString() + ',');
                 }
-                //append new line
-                sb.Append("\r\n");
+                if (i < dt.Rows.Count - 1)
+                    //append new line
+                    sb.Append("\r\n");
             }
 
 

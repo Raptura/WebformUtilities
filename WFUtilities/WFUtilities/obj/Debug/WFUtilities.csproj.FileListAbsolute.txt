@@ -1,0 +1,5 @@
+C:\Users\tug11760\Documents\GitHub\WebformUtilities\WFUtilities\WFUtilities\bin\Debug\WFUtilities.dll
+C:\Users\tug11760\Documents\GitHub\WebformUtilities\WFUtilities\WFUtilities\bin\Debug\WFUtilities.pdb
+C:\Users\tug11760\Documents\GitHub\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.csprojResolveAssemblyReference.cache
+C:\Users\tug11760\Documents\GitHub\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.dll
+C:\Users\tug11760\Documents\GitHub\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.pdb
