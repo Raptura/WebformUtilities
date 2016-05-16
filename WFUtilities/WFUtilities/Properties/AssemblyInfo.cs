@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WFUtilities")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Temple University")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WFUtilities")]
-[assembly: AssemblyCopyright("Copyright © Temple University 2016")]
+[assembly: AssemblyCopyright("Copyright © Armond Smith")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
