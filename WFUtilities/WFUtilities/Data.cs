@@ -17,12 +17,12 @@ using Microsoft.Office.Interop.Excel;
 * Author: Armond Smith
 * Created On: 5/16/2016
 * 
-* Last Modified By:
-* Last Modified On:
+* Last Modified By: Armond Smith
+* Last Modified On: 5/17/2016
 * 
 * Authorized Contributors:
 *
-* Version 1.0.0
+* Version 1.0.5
 **************************************************************************************************/
 
 namespace WFUtilities
@@ -239,10 +239,10 @@ namespace WFUtilities
             }
 
             /*************************************************************************************************
-         * 
-         * Comma Separated Values
-         * 
-        **************************************************************************************************/
+            * 
+            * Comma Separated Values
+            * 
+            **************************************************************************************************/
 
             //GridViews
 
@@ -473,7 +473,6 @@ namespace WFUtilities
         public class Import
         {
             //Set to Generic
-            [Obsolete]
             /// <summary>
             /// Converts a Excel file's data to a Data Table
             /// </summary>
@@ -483,11 +482,26 @@ namespace WFUtilities
             {
                 System.Data.DataTable dt = new System.Data.DataTable();
 
-                //Workbook book;
-                //Worksheet sheet = book.Worksheets.Item
+                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                Workbook book = app.Workbooks.Open(@inputFile);
+                Worksheet sheet = book.Sheets[1];
+                Range range = sheet.UsedRange;
 
-                //Range = sheet.UsedRange;
+                int rowCount = range.Rows.Count;
+                int colCount = range.Columns.Count;
 
+                for (int i = 0; i < rowCount; i++)
+                {
+                    dt.Rows.Add();
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        if (dt.Columns.Count < j + 1)
+                        {
+                            dt.Columns.Add();
+                        }
+                        dt.Rows[i][j] = sheet.Cells[i + 1, j + 1].ToString();
+                    }
+                }
                 return dt;
             }
 
@@ -496,10 +510,26 @@ namespace WFUtilities
             /// </summary>
             /// <param name="inputFile">The input file.</param>
             /// <returns></returns>
-            [Obsolete]
             public static string[][] XLSToArray(string inputFile)
             {
-                throw new NotImplementedException();
+                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                Workbook book = app.Workbooks.Open(@inputFile);
+                Worksheet sheet = book.Sheets[1];
+                Range range = sheet.UsedRange;
+
+                int rowCount = range.Rows.Count;
+                int colCount = range.Columns.Count;
+                string[][] output = new string[rowCount][];
+
+                for (int i = 0; i < rowCount; i++)
+                {
+                    output[i] = new string[colCount];
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        output[i][j] = sheet.Cells[i + 1, j + 1].ToString();
+                    }
+                }
+                return output;
             }
 
 
@@ -523,7 +553,7 @@ namespace WFUtilities
                     string[] lineContent = lines[i].Split(","[0]); //should be the same length as the colLength
                     for (int j = 0; j < lineContent.Length; j++)
                     {
-                        if (dt.Columns.Count < j)
+                        if (dt.Columns.Count < j + 1)
                         {
                             dt.Columns.Add();
                         }
@@ -551,11 +581,11 @@ namespace WFUtilities
 
                 arr = new string[lines.Length][];
 
-                for (int i = 0; i < lines.Length; i++)
+                for (int i = 0; i < lines.Length; i++) //rows
                 {
                     arr[i] = new string[colLength];
                     string[] lineContent = lines[i].Split(","[0]); //should be the same length as the colLength
-                    for (int j = 0; j < lineContent.Length; j++)
+                    for (int j = 0; j < lineContent.Length; j++) //columns
                     {
                         arr[i][j] = lineContent[j];
                     }
