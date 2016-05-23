@@ -5,11 +5,6 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.DirectoryServices;
-using System.Web.Services;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Web.UI.HtmlControls;
-using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
 
 
@@ -80,12 +75,16 @@ namespace WFUtilities
             /// <param name="gv">The Grid View.</param>
             /// <param name="response">The HttpResponse that will download the Excel File.</param>
             /// <param name="fileName">Name of the file.</param>
-            /// <param name="startCol"> The first column of the Gridview to export.</param>
+            /// <param name="startCol">The first column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">Starting column must be within the range of the column count</exception>
             public static void GridViewToXLS(GridView gv, HttpResponse response, string fileName, int startCol)
             {
                 DataSet myDataSet = new DataSet();
                 myDataSet = (DataSet)gv.DataSource;
                 System.Data.DataTable myTable = new System.Data.DataTable(gv.ToString());
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
 
                 for (int i = startCol; i < myTable.Columns.Count; i++)
                 {
@@ -122,11 +121,26 @@ namespace WFUtilities
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
             /// <param name="endCol">The last column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">
+            /// Starting column must be within the range of the column count
+            /// or
+            /// Starting Column must be before the ending column
+            /// or
+            /// Ending Column must be within range of the column count
+            /// </exception>
             public static void GridViewToXLS(GridView gv, HttpResponse response, string fileName, int startCol, int endCol)
             {
                 DataSet myDataSet = new DataSet();
                 myDataSet = (DataSet)gv.DataSource;
                 System.Data.DataTable myTable = new System.Data.DataTable(gv.ToString());
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
+                if (startCol > endCol)
+                    throw new ArgumentOutOfRangeException("Starting Column must be before the ending column");
+                if (endCol > myTable.Columns.Count || endCol < 0)
+                    throw new ArgumentOutOfRangeException("Ending Column must be within range of the column count");
+
 
                 for (int i = startCol; i < endCol; i++)
                 {
@@ -179,9 +193,13 @@ namespace WFUtilities
             /// <param name="response">The HttpResponse that will download the Excel File.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">Starting column must be within the range of the column count</exception>
             public static void DataTableToXLS(System.Data.DataTable dt, HttpResponse response, string fileName, int startCol)
             {
                 System.Data.DataTable myTable = dt.Copy();
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
 
                 for (int i = startCol; i < myTable.Columns.Count; i++)
                 {
@@ -204,7 +222,6 @@ namespace WFUtilities
                 DataTableToXLS(myTable, response, fileName);
             }
 
-
             /// <summary>
             /// Export a DataTable to an Excel File
             /// </summary>
@@ -213,9 +230,24 @@ namespace WFUtilities
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
             /// <param name="endCol">The last column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">
+            /// Starting column must be within the range of the column count
+            /// or
+            /// Starting Column must be before the ending column
+            /// or
+            /// Ending Column must be within range of the column count
+            /// </exception>
             public static void DataTableToXLS(System.Data.DataTable dt, HttpResponse response, string fileName, int startCol, int endCol)
             {
                 System.Data.DataTable myTable = dt.Copy();
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
+                if (startCol > endCol)
+                    throw new ArgumentOutOfRangeException("Starting Column must be before the ending column");
+                if (endCol > myTable.Columns.Count || endCol < 0)
+                    throw new ArgumentOutOfRangeException("Ending Column must be within range of the column count");
+
 
                 for (int i = startCol; i < endCol; i++)
                 {
@@ -289,11 +321,15 @@ namespace WFUtilities
             /// <param name="response">The HttpResponse that will download the Excel File.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">Starting column must be within the range of the column count</exception>
             public static void GridViewToCSV(GridView gv, HttpResponse response, string fileName, int startCol)
             {
                 DataSet myDataSet = new DataSet();
                 myDataSet = (DataSet)gv.DataSource;
                 System.Data.DataTable myTable = new System.Data.DataTable(gv.ToString());
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
 
                 for (int i = startCol; i < myTable.Columns.Count; i++)
                 {
@@ -330,11 +366,25 @@ namespace WFUtilities
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
             /// <param name="endCol">The last column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">
+            /// Starting column must be within the range of the column count
+            /// or
+            /// Starting Column must be before the ending column
+            /// or
+            /// Ending Column must be within range of the column count
+            /// </exception>
             public static void GridViewToCSV(GridView gv, HttpResponse response, string fileName, int startCol, int endCol)
             {
                 DataSet myDataSet = new DataSet();
                 myDataSet = (DataSet)gv.DataSource;
                 System.Data.DataTable myTable = new System.Data.DataTable(gv.ToString());
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
+                if (startCol > endCol)
+                    throw new ArgumentOutOfRangeException("Starting Column must be before the ending column");
+                if (endCol > myTable.Columns.Count || endCol < 0)
+                    throw new ArgumentOutOfRangeException("Ending Column must be within range of the column count");
 
                 for (int i = startCol; i < endCol; i++)
                 {
@@ -406,9 +456,13 @@ namespace WFUtilities
             /// <param name="response">The HttpResponse that will download the Excel File.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">Starting column must be within the range of the column count</exception>
             public static void DataTableToCSV(System.Data.DataTable dt, HttpResponse response, string fileName, int startCol)
             {
                 System.Data.DataTable myTable = dt.Copy();
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
 
                 for (int i = startCol; i < myTable.Columns.Count; i++)
                 {
@@ -439,9 +493,23 @@ namespace WFUtilities
             /// <param name="fileName">Name of the file.</param>
             /// <param name="startCol">The first column of the Gridview to export.</param>
             /// <param name="endCol">The last column of the Gridview to export.</param>
+            /// <exception cref="System.ArgumentOutOfRangeException">
+            /// Starting column must be within the range of the column count
+            /// or
+            /// Starting Column must be before the ending column
+            /// or
+            /// Ending Column must be within range of the column count
+            /// </exception>
             public static void DataTableToCSV(System.Data.DataTable dt, HttpResponse response, string fileName, int startCol, int endCol)
             {
                 System.Data.DataTable myTable = dt.Copy();
+
+                if (startCol > myTable.Columns.Count || startCol < 0)
+                    throw new ArgumentOutOfRangeException("Starting column must be within the range of the column count");
+                if (startCol > endCol)
+                    throw new ArgumentOutOfRangeException("Starting Column must be before the ending column");
+                if (endCol > myTable.Columns.Count || endCol < 0)
+                    throw new ArgumentOutOfRangeException("Ending Column must be within range of the column count");
 
                 for (int i = startCol; i < endCol; i++)
                 {
@@ -609,19 +677,20 @@ namespace WFUtilities
             **************************************************************************************************/
 
             /// <summary>
-            /// Serializes the PDF to a byte array.
+            /// Serializes a file.
             /// </summary>
-            /// <param name="control">The control.</param>
+            /// <param name="control">The FileUpload control.</param>
             /// <param name="fileName">Name of the file.</param>
+            /// <param name="allowedExtentions">The allowed extentions.</param>
             /// <returns></returns>
-            public static byte[] SerializePDF(FileUpload control, string fileName)
+            /// <exception cref="System.ArgumentException">Uploaded file must have same extention as allowedExtentions</exception>
+            public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions)
             {
                 Boolean fileOK = false;
 
                 if (control.HasFile)
                 {
                     string fileExtention = System.IO.Path.GetExtension(control.FileName).ToLower();
-                    string[] allowedExtentions = { ".pdf" };
                     for (int i = 0; i < allowedExtentions.Length; i++)
                     {
                         if (fileExtention == allowedExtentions[i])
@@ -648,34 +717,76 @@ namespace WFUtilities
                 }
                 else
                 {
-                    //Put a modal here that says that the file type must be a PDF file
-                    return null;
+                    string e = "File type must have extentions containing types:";
+
+                    for (int i = 0; i < allowedExtentions.Length; i++)
+                    {
+                        e += allowedExtentions[i] + ", ";
+                    }
+
+                    throw new ArgumentException(e);
                 }
             }
 
             /// <summary>
-            /// Deserializes byte array data, and downloads it as a PDF file.
+            /// Serializes a PDF to a byte array.
             /// </summary>
-            /// <param name="response">The HttpResponse that will download the Excel File.</param>
+            /// <param name="control">The FileUpload control.</param>
             /// <param name="fileName">Name of the file.</param>
-            /// <param name="pdfData">The PDF data in its serialized form.</param>
-            public static void DeserializePDF(HttpResponse response, string fileName, byte[] pdfData)
+            /// <returns></returns>
+            public static byte[] SerializePDF(FileUpload control, string fileName)
+            {
+                return SerializeFile(control, fileName, new string[] { ".pdf" });
+            }
+
+            /// <summary>
+            /// Serializes an image.
+            /// </summary>
+            /// <param name="control">The FileUpload control.</param>
+            /// <param name="fileName">Name of the file.</param>
+            /// <returns></returns>
+            public static byte[] SerializeImage(FileUpload control, string fileName)
+            {
+                string[] extentions = new string[] { ".jpg", ".jpeg", ".png", ".bmp" };
+
+                return SerializeFile(control, fileName, extentions);
+            }
+
+            /// <summary>
+            /// Deserializes the file.
+            /// </summary>
+            /// <param name="response">The HttpResponse that will download the File.</param>
+            /// <param name="fileName">Name of the file.</param>
+            /// <param name="serializedData">The serialized data.</param>
+            /// <param name="fileType">Type of the file.</param>
+            public static void DeserializeFile(HttpResponse response, string fileName, byte[] serializedData, string fileType)
             {
                 response.Clear();
                 response.AddHeader("content-disposition",
-                "attachment;filename=" + fileName + ".pdf");
+                "attachment;filename=" + fileName + fileType);
                 response.Charset = "";
                 response.ContentType = "application/pdf";
 
                 response.Buffer = true;
 
                 //convert to the pdf
-                MemoryStream ms = new MemoryStream(pdfData);
+                MemoryStream ms = new MemoryStream(serializedData);
                 ms.WriteTo(response.OutputStream);
                 response.End();
-
-                //System.IO.File.WriteAllBytes(fileName, pdfData);
             }
+
+            /// <summary>
+            /// Deserializes byte array data, and downloads it as a PDF file.
+            /// </summary>
+            /// <param name="response">The HttpResponse that will download the PDF File.</param>
+            /// <param name="fileName">Name of the file.</param>
+            /// <param name="pdfData">The PDF data in its serialized form.</param>
+            public static void DeserializePDF(HttpResponse response, string fileName, byte[] pdfData)
+            {
+                DeserializeFile(response, fileName, pdfData, ".pdf");
+            }
+
+
 
         }
 
