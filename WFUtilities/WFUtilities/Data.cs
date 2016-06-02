@@ -540,17 +540,18 @@ namespace WFUtilities
         /// </summary>
         public class Import
         {
-            //Set to Generic
             /// <summary>
             /// Converts a Excel file's data to a Data Table
             /// </summary>
             /// <param name="inputFile">The input file.</param>
+            /// <param name="hasHeaderColumn">if set to <c>true</c> [has header column].</param>
+            /// <param name="hasHeaderRow">if set to <c>true</c> [has header row].</param>
             /// <returns></returns>
-            public static System.Data.DataTable XLSToDataTable(string inputFile)
+            public static System.Data.DataTable XLSToDataTable(string inputFile, bool hasHeaderColumn = false, bool hasHeaderRow = false)
             {
                 System.Data.DataTable dt = new System.Data.DataTable();
 
-                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                Application app = new Application();
                 Workbook book = app.Workbooks.Open(@inputFile);
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
@@ -558,10 +559,13 @@ namespace WFUtilities
                 int rowCount = range.Rows.Count;
                 int colCount = range.Columns.Count;
 
-                for (int i = 0; i < rowCount; i++)
+                int rowStart = hasHeaderRow ? 1 : 0;
+                int colStart = hasHeaderColumn ? 1 : 0;
+
+                for (int i = rowStart; i < rowCount; i++)
                 {
                     dt.Rows.Add();
-                    for (int j = 0; j < colCount; j++)
+                    for (int j = colStart; j < colCount; j++)
                     {
                         if (dt.Columns.Count < j + 1)
                         {
@@ -570,6 +574,7 @@ namespace WFUtilities
                         dt.Rows[i][j] = sheet.Cells[i + 1, j + 1].ToString();
                     }
                 }
+
                 return dt;
             }
 
@@ -577,10 +582,12 @@ namespace WFUtilities
             /// Converts a Excel file's data to a string jagged array
             /// </summary>
             /// <param name="inputFile">The input file.</param>
+            /// <param name="hasHeaderRow">if set to <c>true</c> [has header row].</param>
+            /// <param name="hasHeaderColumn">if set to <c>true</c> [has header column].</param>
             /// <returns></returns>
-            public static string[][] XLSToArray(string inputFile)
+            public static string[][] XLSToArray(string inputFile, bool hasHeaderRow = false, bool hasHeaderColumn = false)
             {
-                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                Application app = new Application();
                 Workbook book = app.Workbooks.Open(@inputFile);
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
@@ -589,10 +596,13 @@ namespace WFUtilities
                 int colCount = range.Columns.Count;
                 string[][] output = new string[rowCount][];
 
-                for (int i = 0; i < rowCount; i++)
+                int rowStart = hasHeaderRow ? 1 : 0;
+                int colStart = hasHeaderColumn ? 1 : 0;
+
+                for (int i = rowStart; i < rowCount; i++)
                 {
                     output[i] = new string[colCount];
-                    for (int j = 0; j < colCount; j++)
+                    for (int j = colStart; j < colCount; j++)
                     {
                         output[i][j] = sheet.Cells[i + 1, j + 1].ToString();
                     }
@@ -790,5 +800,5 @@ namespace WFUtilities
 
         }
 
-    }
+    }  
 }
