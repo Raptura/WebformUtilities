@@ -556,22 +556,24 @@ namespace WFUtilities
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
 
-                int rowCount = range.Rows.Count;
-                int colCount = range.Columns.Count;
+                int rowStart = hasHeaderColumn ? 1 : 0;
+                int colStart = hasHeaderRow ? 1 : 0;
 
-                int rowStart = hasHeaderRow ? 1 : 0;
-                int colStart = hasHeaderColumn ? 1 : 0;
+                int rowCount = range.Rows.Count - rowStart; //effective row count
+                int colCount = range.Columns.Count - colStart; //effective column count
 
-                for (int i = rowStart; i < rowCount; i++)
+
+                for (int i = 0; i < colCount; i++)
+                    dt.Columns.Add(hasHeaderColumn ? sheet.Cells[1, i + 1 + colStart].Value : "Column" + i);
+
+
+                //Set up values
+                for (int i = 0; i < rowCount; i++)
                 {
                     dt.Rows.Add();
-                    for (int j = colStart; j < colCount; j++)
+                    for (int j = 0; j < colCount; j++)
                     {
-                        if (dt.Columns.Count < j + 1)
-                        {
-                            dt.Columns.Add();
-                        }
-                        dt.Rows[i][j] = sheet.Cells[i + 1, j + 1].ToString();
+                        dt.Rows[i][j] = sheet.Cells[i + 1 + rowStart, j + 1 + colStart].Value;
                     }
                 }
 
@@ -592,19 +594,21 @@ namespace WFUtilities
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
 
-                int rowCount = range.Rows.Count;
-                int colCount = range.Columns.Count;
+
+                int rowStart = hasHeaderColumn ? 1 : 0;
+                int colStart = hasHeaderRow ? 1 : 0;
+
+                int rowCount = range.Rows.Count - rowStart; //effective row count
+                int colCount = range.Columns.Count - colStart; //effective column count
+
                 string[][] output = new string[rowCount][];
 
-                int rowStart = hasHeaderRow ? 1 : 0;
-                int colStart = hasHeaderColumn ? 1 : 0;
-
-                for (int i = rowStart; i < rowCount; i++)
+                for (int i = 0; i < rowCount; i++)
                 {
                     output[i] = new string[colCount];
-                    for (int j = colStart; j < colCount; j++)
+                    for (int j = 0; j < colCount; j++)
                     {
-                        output[i][j] = sheet.Cells[i + 1, j + 1].ToString();
+                        output[i][j] = sheet.Cells[i + 1 + rowStart, j + colStart + 1].Value;
                     }
                 }
                 return output;
@@ -800,5 +804,5 @@ namespace WFUtilities
 
         }
 
-    }  
+    }
 }
