@@ -12,12 +12,12 @@ using Microsoft.Office.Interop.Excel;
 * Author: Armond Smith
 * Created On: 5/16/2016
 * 
-* Last Modified By: Armond Smith
-* Last Modified On: 5/17/2016
+* Last Modified By: Kyler Love
+* Last Modified On: 6/21/2016
 * 
 * Authorized Contributors:
-*
-* Version 1.0.5
+* Kyler Love
+* Version 1.0.6
 **************************************************************************************************/
 
 namespace WFUtilities
@@ -576,7 +576,7 @@ namespace WFUtilities
                         dt.Rows[i][j] = sheet.Cells[i + 1 + rowStart, j + 1 + colStart].Value;
                     }
                 }
-
+                app.Quit();
                 return dt;
             }
 
@@ -611,6 +611,7 @@ namespace WFUtilities
                         output[i][j] = sheet.Cells[i + 1 + rowStart, j + colStart + 1].Value;
                     }
                 }
+                app.Quit();
                 return output;
             }
 
