@@ -701,7 +701,7 @@ namespace WFUtilities
             /// <param name= "autoGenDirectory"> Will the virtual download path be automatically generated(true) or does it already exist </param>
             /// <returns></returns>
             /// <exception cref="System.ArgumentException">Uploaded file must have same extention as allowedExtentions</exception>
-            public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions, string virtualDownloadPath = "~/UploadedForms")
+            public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions, string virtualDownloadPath = "~/UploadedForms/")
             {
                 Boolean fileOK = false;
 
