@@ -697,9 +697,11 @@ namespace WFUtilities
             /// <param name="control">The FileUpload control.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <param name="allowedExtentions">The allowed extentions.</param>
+            /// <param name = "virtualDownloadPath">  The relative path where the file will be stored temporarily</param>
+            /// <param name= "autoGenDirectory"> Will the virtual download path be automatically generated(true) or does it already exist </param>
             /// <returns></returns>
             /// <exception cref="System.ArgumentException">Uploaded file must have same extention as allowedExtentions</exception>
-            public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions)
+            public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions, string virtualDownloadPath = "~/UploadedForms")
             {
                 Boolean fileOK = false;
 
@@ -717,7 +719,12 @@ namespace WFUtilities
 
                 if (fileOK)
                 {
-                    String path = System.Web.Hosting.HostingEnvironment.MapPath("~/UploadedForms/");
+                    if (!Directory.Exists(virtualDownloadPath))
+                    {
+                        Directory.CreateDirectory(virtualDownloadPath);
+                    }
+
+                    String path = System.Web.Hosting.HostingEnvironment.MapPath(virtualDownloadPath);
                     control.PostedFile.SaveAs(path + fileName);
                     string filePath = path + fileName;
 
