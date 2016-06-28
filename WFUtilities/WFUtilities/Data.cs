@@ -546,8 +546,10 @@ namespace WFUtilities
             /// <param name="inputFile">The input file.</param>
             /// <param name="hasHeaderColumn">if set to <c>true</c> [has header column].</param>
             /// <param name="hasHeaderRow">if set to <c>true</c> [has header row].</param>
+            /// <param name="columnStart">if set to <c>true</c>[The column start].</param>
+            /// <param name="rowStart">if set to <c>true</c>[The row start].</param>
             /// <returns></returns>
-            public static System.Data.DataTable XLSToDataTable(string inputFile, bool hasHeaderColumn = false, bool hasHeaderRow = false)
+            public static System.Data.DataTable XLSToDataTable(string inputFile, bool hasHeaderColumn = false, bool hasHeaderRow = false, int columnStart = 1, int rowStart = 1)
             {
                 System.Data.DataTable dt = new System.Data.DataTable();
 
@@ -556,15 +558,15 @@ namespace WFUtilities
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
 
-                int rowStart = hasHeaderColumn ? 1 : 0;
-                int colStart = hasHeaderRow ? 1 : 0;
+                int m_rowStart = hasHeaderColumn ? rowStart : 0;
+                int m_colStart = hasHeaderRow ? columnStart : 0;
 
-                int rowCount = range.Rows.Count - rowStart; //effective row count
-                int colCount = range.Columns.Count - colStart; //effective column count
+                int rowCount = range.Rows.Count - m_rowStart; //effective row count
+                int colCount = range.Columns.Count - m_colStart; //effective column count
 
 
                 for (int i = 0; i < colCount; i++)
-                    dt.Columns.Add(hasHeaderColumn ? sheet.Cells[1, i + 1 + colStart].Value : "Column" + i);
+                    dt.Columns.Add(hasHeaderColumn ? sheet.Cells[1, i + 1 + m_colStart].Value : "Column" + i);
 
 
                 //Set up values
@@ -573,7 +575,7 @@ namespace WFUtilities
                     dt.Rows.Add();
                     for (int j = 0; j < colCount; j++)
                     {
-                        dt.Rows[i][j] = sheet.Cells[i + 1 + rowStart, j + 1 + colStart].Value;
+                        dt.Rows[i][j] = sheet.Cells[i + 1 + m_rowStart, j + 1 + m_colStart].Value;
                     }
                 }
                 app.Quit();
@@ -586,8 +588,10 @@ namespace WFUtilities
             /// <param name="inputFile">The input file.</param>
             /// <param name="hasHeaderRow">if set to <c>true</c> [has header row].</param>
             /// <param name="hasHeaderColumn">if set to <c>true</c> [has header column].</param>
+            /// <param name="columnStart">if set to <c>true</c> [The column start].</param>
+            /// <param name="rowStart">if set to <c>true</c> [The row start].</param>
             /// <returns></returns>
-            public static string[][] XLSToArray(string inputFile, bool hasHeaderRow = false, bool hasHeaderColumn = false)
+            public static string[][] XLSToArray(string inputFile, bool hasHeaderRow = false, bool hasHeaderColumn = false, int columnStart = 1, int rowStart = 1)
             {
                 Application app = new Application();
                 Workbook book = app.Workbooks.Open(@inputFile);
@@ -595,11 +599,11 @@ namespace WFUtilities
                 Range range = sheet.UsedRange;
 
 
-                int rowStart = hasHeaderColumn ? 1 : 0;
-                int colStart = hasHeaderRow ? 1 : 0;
+                int m_rowStart = hasHeaderColumn ? rowStart : 0;
+                int m_colStart = hasHeaderRow ? columnStart : 0;
 
-                int rowCount = range.Rows.Count - rowStart; //effective row count
-                int colCount = range.Columns.Count - colStart; //effective column count
+                int rowCount = range.Rows.Count - m_rowStart; //effective row count
+                int colCount = range.Columns.Count - m_colStart; //effective column count
 
                 string[][] output = new string[rowCount][];
 
@@ -608,7 +612,7 @@ namespace WFUtilities
                     output[i] = new string[colCount];
                     for (int j = 0; j < colCount; j++)
                     {
-                        output[i][j] = sheet.Cells[i + 1 + rowStart, j + colStart + 1].Value;
+                        output[i][j] = sheet.Cells[i + 1 + m_rowStart, j + m_colStart + 1].Value;
                     }
                 }
                 app.Quit();
