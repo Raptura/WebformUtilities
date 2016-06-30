@@ -565,7 +565,7 @@ namespace WFUtilities
                 int colCount = range.Columns.Count - m_colStart; //effective column count
 
 
-                for (int i = rowStart; i < colCount; i++)
+                for (int i = m_colStart; i < colCount; i++)
                     dt.Columns.Add(hasHeaderColumn ? (sheet.Cells[rowStart, i + 1 + m_colStart].Value as string) : "Column" + i);
 
 
