@@ -729,8 +729,9 @@ namespace WFUtilities
                     }
 
                     string extention = Path.GetExtension(control.PostedFile.FileName);
-                    control.PostedFile.SaveAs(path + fileName + extention);
-                    string filePath = path + fileName;
+                    string filePath = path + fileName + extention;
+                    control.PostedFile.SaveAs(filePath);
+
 
                     //FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                     //byte[] bytes = new byte[fs.Length];
