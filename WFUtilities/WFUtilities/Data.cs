@@ -565,8 +565,8 @@ namespace WFUtilities
                 int colCount = range.Columns.Count - m_colStart; //effective column count
 
 
-                for (int i = 0; i < colCount; i++)
-                    dt.Columns.Add(hasHeaderColumn ? sheet.Cells[1, i + 1 + m_colStart].Value : "Column" + i);
+                for (int i = rowStart; i < colCount; i++)
+                    dt.Columns.Add(hasHeaderColumn ? (sheet.Cells[rowStart, i + 1 + m_colStart].Value as string) : "Column" + i);
 
 
                 //Set up values
@@ -728,8 +728,8 @@ namespace WFUtilities
                         Directory.CreateDirectory(path);
                     }
 
-
-                    control.PostedFile.SaveAs(path + fileName);
+                    string extention = Path.GetExtension(control.PostedFile.FileName);
+                    control.PostedFile.SaveAs(path + fileName + extention);
                     string filePath = path + fileName;
 
                     //FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
