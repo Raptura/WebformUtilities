@@ -620,7 +620,6 @@ namespace WFUtilities
             }
 
 
-
             /// <summary>
             /// Converts a CSV file's data to a Data Table
             /// </summary>
@@ -698,11 +697,10 @@ namespace WFUtilities
             /// <summary>
             /// Serializes a file.
             /// </summary>
-            /// <param name="control">The FileUpload control.</param>
-            /// <param name="fileName">Name of the file.</param>
-            /// <param name="allowedExtentions">The allowed extentions.</param>
+            /// <param name="control"> The FileUpload control.</param>
+            /// <param name="fileName"> Name of the file.</param>
+            /// <param name="allowedExtentions"> The allowed extentions.</param>
             /// <param name = "virtualDownloadPath">  The relative path where the file will be stored temporarily</param>
-            /// <param name= "autoGenDirectory"> Will the virtual download path be automatically generated(true) or does it already exist </param>
             /// <returns></returns>
             /// <exception cref="System.ArgumentException">Uploaded file must have same extention as allowedExtentions</exception>
             public static byte[] SerializeFile(FileUpload control, string fileName, string[] allowedExtentions, string virtualDownloadPath = "~/UploadedForms/")
@@ -723,12 +721,14 @@ namespace WFUtilities
 
                 if (fileOK)
                 {
-                    if (!Directory.Exists(virtualDownloadPath))
-                    {
-                        Directory.CreateDirectory(virtualDownloadPath);
-                    }
 
                     String path = System.Web.Hosting.HostingEnvironment.MapPath(virtualDownloadPath);
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+
                     control.PostedFile.SaveAs(path + fileName);
                     string filePath = path + fileName;
 
@@ -760,9 +760,9 @@ namespace WFUtilities
             /// <param name="control">The FileUpload control.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <returns></returns>
-            public static byte[] SerializePDF(FileUpload control, string fileName)
+            public static byte[] SerializePDF(FileUpload control, string fileName, string virtualDownloadPath = "~/UploadedForms/")
             {
-                return SerializeFile(control, fileName, new string[] { ".pdf" });
+                return SerializeFile(control, fileName, new string[] { ".pdf" }, virtualDownloadPath);
             }
 
             /// <summary>
@@ -771,11 +771,11 @@ namespace WFUtilities
             /// <param name="control">The FileUpload control.</param>
             /// <param name="fileName">Name of the file.</param>
             /// <returns></returns>
-            public static byte[] SerializeImage(FileUpload control, string fileName)
+            public static byte[] SerializeImage(FileUpload control, string fileName, string virtualDownloadPath = "~/UploadedForms/")
             {
                 string[] extentions = new string[] { ".jpg", ".jpeg", ".png", ".bmp" };
 
-                return SerializeFile(control, fileName, extentions);
+                return SerializeFile(control, fileName, extentions, virtualDownloadPath);
             }
 
             /// <summary>
