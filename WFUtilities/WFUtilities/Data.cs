@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.Office.Interop.Excel;
+using Excel;
 
 
 /*************************************************************************************************
@@ -13,11 +14,11 @@ using Microsoft.Office.Interop.Excel;
 * Created On: 5/16/2016
 * 
 * Last Modified By: Kyler Love
-* Last Modified On: 6/21/2016
+* Last Modified On: 7/8/2016
 * 
 * Authorized Contributors:
 * Kyler Love
-* Version 1.0.6
+* Version 1.0.7
 **************************************************************************************************/
 
 namespace WFUtilities
@@ -558,27 +559,38 @@ namespace WFUtilities
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
 
-                int m_rowStart = hasHeaderColumn ? rowStart : 0;
-                int m_colStart = hasHeaderRow ? columnStart : 0;
-
-                int rowCount = range.Rows.Count - m_rowStart; //effective row count
-                int colCount = range.Columns.Count - m_colStart; //effective column count
-
-
-                for (int i = m_colStart; i < colCount; i++)
-                    dt.Columns.Add(hasHeaderColumn ? (sheet.Cells[rowStart, i + 1 + m_colStart].Value as string) : "Column" + i);
-
-
-                //Set up values
-                for (int i = 0; i < rowCount; i++)
+                try
                 {
-                    dt.Rows.Add();
-                    for (int j = 0; j < colCount; j++)
+                    int m_rowStart = hasHeaderColumn ? rowStart : 0;
+                    int m_colStart = hasHeaderRow ? columnStart : 0;
+
+                    int rowCount = range.Rows.Count - m_rowStart; //effective row count
+                    int colCount = range.Columns.Count - m_colStart; //effective column count
+
+
+                    for (int i = m_colStart; i < colCount; i++)
+                        dt.Columns.Add(hasHeaderColumn ? (sheet.Cells[rowStart, i + 1 + m_colStart].Value as string) : "Column" + i);
+
+
+                    //Set up values
+                    for (int i = 0; i < rowCount; i++)
                     {
-                        dt.Rows[i][j] = sheet.Cells[i + 1 + m_rowStart, j + 1 + m_colStart].Value;
+                        dt.Rows.Add();
+                        for (int j = 0; j < colCount; j++)
+                        {
+                            dt.Rows[i][j] = sheet.Cells[i + 1 + m_rowStart, j + 1 + m_colStart].Value;
+                        }
                     }
                 }
-                app.Quit();
+                catch
+                {
+
+                }
+                finally
+                {
+                    app.Quit();
+                }
+               
                 return dt;
             }
 
@@ -597,26 +609,51 @@ namespace WFUtilities
                 Workbook book = app.Workbooks.Open(@inputFile);
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
+         
+                    int m_rowStart = hasHeaderColumn ? rowStart : 0;
+                    int m_colStart = hasHeaderRow ? columnStart : 0;
 
-
-                int m_rowStart = hasHeaderColumn ? rowStart : 0;
-                int m_colStart = hasHeaderRow ? columnStart : 0;
-
-                int rowCount = range.Rows.Count - m_rowStart; //effective row count
-                int colCount = range.Columns.Count - m_colStart; //effective column count
+                    int rowCount = range.Rows.Count - m_rowStart; //effective row count
+                    int colCount = range.Columns.Count - m_colStart; //effective column count
 
                 string[][] output = new string[rowCount][];
-
-                for (int i = 0; i < rowCount; i++)
+                try
                 {
-                    output[i] = new string[colCount];
-                    for (int j = 0; j < colCount; j++)
+                    for (int i = 0; i < rowCount; i++)
                     {
-                        output[i][j] = sheet.Cells[i + 1 + m_rowStart, j + m_colStart + 1].Value;
+                        output[i] = new string[colCount];
+                        for (int j = 0; j < colCount; j++)
+                        {
+                            output[i][j] = sheet.Cells[i + 1 + m_rowStart, j + m_colStart + 1].Value;
+                        }
                     }
                 }
-                app.Quit();
+                catch { }
+                finally
+                {
+                    app.Quit();
+                }
+              
                 return output;
+            }
+
+            /// <summary>
+            /// converts a excel byte array (fileuploader creates this for you) to data table.
+            /// needs the NuGet package excelDatareader (npm: Install-Package ExcelDataReader), using Excel.
+            /// Use if you cant/dont want to save documents to your directories
+            /// </summary>
+            /// <param name="excelArray">The excel array.</param>
+            /// <returns></returns>
+            public static System.Data.DataTable XLSXByteArraytoDataTable(byte[] excelArray)
+            {
+                IExcelDataReader excelReader;
+                System.Data.DataTable dt = new System.Data.DataTable();
+                MemoryStream excelStream = new MemoryStream(excelArray);
+                excelReader = ExcelReaderFactory.CreateOpenXmlReader(excelStream);
+                excelReader.IsFirstRowAsColumnNames = true;
+                DataSet ds = excelReader.AsDataSet();
+                dt = ds.Tables[0];
+                return dt;
             }
 
 
