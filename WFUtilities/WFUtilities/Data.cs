@@ -13,12 +13,12 @@ using Excel;
 * Author: Armond Smith
 * Created On: 5/16/2016
 * 
-* Last Modified By: Kyler Love
-* Last Modified On: 7/8/2016
+* Last Modified By: Armond Smith
+* Last Modified On: 8/16/2016
 * 
 * Authorized Contributors:
 * Kyler Love
-* Version 1.0.7
+* Version 1.0.8
 **************************************************************************************************/
 
 namespace WFUtilities
@@ -590,7 +590,7 @@ namespace WFUtilities
                 {
                     app.Quit();
                 }
-               
+
                 return dt;
             }
 
@@ -609,12 +609,12 @@ namespace WFUtilities
                 Workbook book = app.Workbooks.Open(@inputFile);
                 Worksheet sheet = book.Sheets[1];
                 Range range = sheet.UsedRange;
-         
-                    int m_rowStart = hasHeaderColumn ? rowStart : 0;
-                    int m_colStart = hasHeaderRow ? columnStart : 0;
 
-                    int rowCount = range.Rows.Count - m_rowStart; //effective row count
-                    int colCount = range.Columns.Count - m_colStart; //effective column count
+                int m_rowStart = hasHeaderColumn ? rowStart : 0;
+                int m_colStart = hasHeaderRow ? columnStart : 0;
+
+                int rowCount = range.Rows.Count - m_rowStart; //effective row count
+                int colCount = range.Columns.Count - m_colStart; //effective column count
 
                 string[][] output = new string[rowCount][];
                 try
@@ -633,7 +633,7 @@ namespace WFUtilities
                 {
                     app.Quit();
                 }
-              
+
                 return output;
             }
 
@@ -655,7 +655,6 @@ namespace WFUtilities
                 dt = ds.Tables[0];
                 return dt;
             }
-
 
             /// <summary>
             /// Converts a CSV file's data to a Data Table
@@ -823,13 +822,14 @@ namespace WFUtilities
             /// <param name="fileName">Name of the file.</param>
             /// <param name="serializedData">The serialized data.</param>
             /// <param name="fileType">Type of the file.</param>
-            public static void DeserializeFile(HttpResponse response, string fileName, byte[] serializedData, string fileType)
+            /// <param name="contentType">Type of the content. Only change this if you understand Content type output.</param>
+            public static void DeserializeFile(HttpResponse response, string fileName, byte[] serializedData, string fileType, string contentType = "application/octet-stream")
             {
                 response.Clear();
                 response.AddHeader("content-disposition",
                 "attachment;filename=" + fileName + fileType);
                 response.Charset = "";
-                response.ContentType = "application/pdf";
+                response.ContentType = contentType;
 
                 response.Buffer = true;
 
@@ -847,12 +847,39 @@ namespace WFUtilities
             /// <param name="pdfData">The PDF data in its serialized form.</param>
             public static void DeserializePDF(HttpResponse response, string fileName, byte[] pdfData)
             {
-                DeserializeFile(response, fileName, pdfData, ".pdf");
+                DeserializeFile(response, fileName, pdfData, ".pdf", "application/pdf");
+            }
+
+            /// <summary>
+            /// Deserializes a Byte Array and pushes it through response
+            /// </summary>
+            /// <param name="response">The response.</param>
+            /// <param name="fileName">Name of the file.</param>
+            /// <param name="serializedData">The serialized data.</param>
+            /// <param name="fileType">Type of the file.</param>
+            /// <param name="contentType">Type of the content. Only change this if you understand Content Type output</param>
+            public static void ResponseDeserialize(HttpResponse response, string fileName, byte[] serializedData, string fileType, string contentType = "application/octet-stream")
+            {
+                response.Clear();
+                response.AddHeader("content-disposition", "attachment;filename=" + fileName + fileType);
+                response.Charset = "";
+                response.ContentType = contentType;
+                response.BinaryWrite(serializedData);
+                response.Buffer = true;
+
+                response.End();
+            }
+
+            public static void DeserializeResponsePDF(HttpResponse response, string fileName, byte[] pdfData)
+            {
+                ResponseDeserialize(response, fileName, pdfData, ".pdf", "application/pdf");
             }
 
 
 
         }
+
+
 
     }
 }
