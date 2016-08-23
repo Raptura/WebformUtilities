@@ -7,6 +7,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.Office.Interop.Excel;
 using Excel;
+using iTextSharp;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 
 /*************************************************************************************************
@@ -31,9 +35,68 @@ namespace WFUtilities
         /// </summary>
         public class Export
         {
+
             /*************************************************************************************************
             * 
-            * Excell Values
+            * Create NEW PDF Documents with data
+            * 
+            * This is not a simple method call. Im attempting to make this as easy as possible but you will still
+            * need to edit some things.  We use the iTextSharp Version 4.0.1(this class references it, so you can get it 
+            * from the bin folder) and the HTMLWorker object which has since been deprecated (New versions 
+            * use XMLWorkerHelper which gives you more functionality however for simple PDF building, HTMLWorker will work).
+            * 
+            * The easiest way to build the PDF that I do is to create a seperate aspx page and apply this method in the code behind so that I can 
+            * call session objects with all the data I need. Passing in the page response will work in codebehind any page... Data.Export.BuildPDF(this.Response)
+            **************************************************************************************************/
+            /// <summary>
+            /// Builds the PDF.
+            /// </summary>
+            public static void BuildPDF(HttpResponse Response)
+            {
+                //the string that will be the html... pass in the html if you are just trying to 
+                //turn a page into a pdf instead of using this
+                StringBuilder sb = new StringBuilder();
+
+                try
+                {
+                    // Create a Document object, the numbers are margins
+                    var document = new Document(PageSize.A4, 50, 50, 25, 25);
+
+                    // Create a new PdfWrite object, writing the output to a MemoryStream
+                    var output = new MemoryStream();
+                    var writer = PdfWriter.GetInstance(document, output);
+
+                    document.Open();
+                    //This is where you would build the pdf with html if you are not passing in the HTML page text which is advised
+                    sb.Append("<h1 style='text-align: center;'>TEST</h1><br/><br/>");
+                    
+                    var parsedHtmlElements = HTMLWorker.ParseToList(new StringReader(sb.ToString()), null);
+
+                    foreach (var htmlElement in parsedHtmlElements)
+                    {
+                        document.Add(htmlElement as IElement);
+                    }
+                  
+                    document.Close();
+
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename=TEST.pdf"));
+                    Response.BinaryWrite(output.ToArray());
+                }
+                catch (Exception ex)
+                {
+                   //do stuff with error
+                }
+                finally
+                {
+
+                }
+            }
+            
+
+            /*************************************************************************************************
+            * 
+            * Excel Values
             * 
             **************************************************************************************************/
 
@@ -532,8 +595,7 @@ namespace WFUtilities
 
                 DataTableToCSV(myTable, response, fileName);
             }
-
-
+            
         }
 
         /// <summary>
