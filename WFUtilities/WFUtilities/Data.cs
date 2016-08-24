@@ -11,6 +11,7 @@ using iTextSharp;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Collections.Generic;
 
 
 /*************************************************************************************************
@@ -69,14 +70,14 @@ namespace WFUtilities
                     document.Open();
                     //This is where you would build the pdf with html if you are not passing in the HTML page text which is advised
                     sb.Append("<h1 style='text-align: center;'>TEST</h1><br/><br/>");
-                    
+
                     var parsedHtmlElements = HTMLWorker.ParseToList(new StringReader(sb.ToString()), null);
 
                     foreach (var htmlElement in parsedHtmlElements)
                     {
                         document.Add(htmlElement as IElement);
                     }
-                  
+
                     document.Close();
 
                     Response.ContentType = "application/pdf";
@@ -85,14 +86,14 @@ namespace WFUtilities
                 }
                 catch (Exception ex)
                 {
-                   //do stuff with error
+                    //do stuff with error
                 }
                 finally
                 {
 
                 }
             }
-            
+
 
             /*************************************************************************************************
             * 
@@ -595,7 +596,29 @@ namespace WFUtilities
 
                 DataTableToCSV(myTable, response, fileName);
             }
-            
+
+
+            public static System.Data.DataTable TruncateDataTable(System.Data.DataTable dt, List<string> columnNames)
+            {
+                System.Data.DataTable newDt = new System.Data.DataTable();
+
+                foreach (String key in columnNames)
+                {
+                    newDt.Columns.Add(key);
+                }
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    DataRow currentRow = newDt.Rows.Add();
+                    foreach (DataColumn col in newDt.Columns)
+                    {
+                        currentRow[col] = dr[col];
+                    }
+                }
+
+                //TODO: Fix return
+                return newDt;
+            }
         }
 
         /// <summary>
