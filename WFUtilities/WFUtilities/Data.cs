@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Web;
 using System.Web.UI;
@@ -597,28 +598,24 @@ namespace WFUtilities
                 DataTableToCSV(myTable, response, fileName);
             }
 
-
-            public static System.Data.DataTable TruncateDataTable(System.Data.DataTable dt, List<string> columnNames)
+            public static void WriteZip(List<string> filePathes, HttpResponse response, string fileName)
             {
-                System.Data.DataTable newDt = new System.Data.DataTable();
+                response.Clear();
+                response.AddHeader("content-disposition", "attachment; filename=" + fileName + ".zip");
+                response.ContentType = "application/zip";
 
-                foreach (String key in columnNames)
+                foreach (string path in filePathes)
                 {
-                    newDt.Columns.Add(key);
-                }
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    DataRow currentRow = newDt.Rows.Add();
-                    foreach (DataColumn col in newDt.Columns)
+                    byte[] bytes = File.ReadAllBytes(path);
+                    foreach (byte b in bytes)
                     {
-                        currentRow[col] = dr[col];
+                        response.OutputStream.WriteByte(b);
                     }
                 }
+                response.Close();
 
-                //TODO: Fix return
-                return newDt;
             }
+
         }
 
         /// <summary>
@@ -960,6 +957,42 @@ namespace WFUtilities
                 ResponseDeserialize(response, fileName, pdfData, ".pdf", "application/pdf");
             }
 
+
+
+        }
+
+        /// <summary>
+        /// Handles Data Manipulation
+        /// </summary>
+        public class Manipulation
+        {
+
+            /// <summary>
+            /// Truncates a Data Table via its columns
+            /// </summary>
+            /// <param name="dt">The data table</param>
+            /// <param name="columnNames">The list of the columns the data table will keep</param>
+            /// <returns></returns>
+            public static System.Data.DataTable TruncateDataTable(System.Data.DataTable dt, List<string> columnNames)
+            {
+                System.Data.DataTable newDt = new System.Data.DataTable();
+
+                foreach (String key in columnNames)
+                {
+                    newDt.Columns.Add(key);
+                }
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    DataRow currentRow = newDt.Rows.Add();
+                    foreach (DataColumn col in newDt.Columns)
+                    {
+                        currentRow[col] = dr[col];
+                    }
+                }
+
+                return newDt;
+            }
 
 
         }
