@@ -20,3 +20,5 @@ C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\bin\Debug\Excel.pdb
 C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.dll
 C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.pdb
 C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\obj\Debug\WFUtilities.csprojResolveAssemblyReference.cache
+C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\tug11760\WebformUtilities\WFUtilities\WFUtilities\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
